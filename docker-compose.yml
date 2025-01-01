@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123 # root 비밀번호 설정
+      MYSQL_DATABASE: fulldb               # 초기 데이터베이스 이름
+      MYSQL_USER: tuna                   # 사용자 이름
+      MYSQL_PASSWORD: tuna123       # 사용자 비밀번호
+    ports:
+      - "3306:3306"                       # 호스트와 컨테이너의 포트 매핑
+    volumes:
+      - db_data:/var/lib/mysql            # 데이터 지속성을 위한 볼륨
+
+volumes:
+  db_data:
