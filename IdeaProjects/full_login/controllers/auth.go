@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"full_login/models"
+	"full_login/utils/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -67,4 +68,24 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+// 미들웨어
+func CurrentUser(c *gin.Context) {
+
+	user_id, err := token.ExtractTokenID(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	u, err := models.GetUserByID(user_id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "success", "data": u})
 }

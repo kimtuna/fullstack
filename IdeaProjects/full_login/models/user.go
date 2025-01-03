@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"full_login/utils/token"
 	"html"
 	"strings"
@@ -16,7 +17,6 @@ type User struct {
 }
 
 func (u *User) SaveUser() (*User, error) {
-
 	var err error
 	err = DB.Create(&u).Error
 	if err != nil {
@@ -38,7 +38,6 @@ func (u *User) BeforeSave() error {
 	u.Username = html.EscapeString(strings.TrimSpace(u.Username))
 
 	return nil
-
 }
 
 func VerifyPassword(password, hashedPassword string) error {
@@ -46,7 +45,6 @@ func VerifyPassword(password, hashedPassword string) error {
 }
 
 func LoginCheck(username string, password string) (string, error) {
-
 	var err error
 
 	u := User{}
@@ -70,5 +68,20 @@ func LoginCheck(username string, password string) (string, error) {
 	}
 
 	return token, nil
+}
 
+func GetUserByID(uid uint) (User, error) {
+	var u User
+
+	if err := DB.First(&u, uid).Error; err != nil {
+		return u, errors.New("User not found!")
+	}
+
+	u.PrepareGive()
+
+	return u, nil
+}
+
+func (u *User) PrepareGive() {
+	u.Password = ""
 }
