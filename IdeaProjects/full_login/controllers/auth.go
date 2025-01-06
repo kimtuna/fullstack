@@ -72,18 +72,15 @@ func Login(c *gin.Context) {
 
 // 미들웨어
 func CurrentUser(c *gin.Context) {
-
-	user_id, err := token.ExtractTokenID(c)
-
+	userId, err := token.ExtractTokenID(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	u, err := models.GetUserByID(user_id)
-
+	u, err := models.GetUserByID(userId)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()}) // 상태 코드를 NotFound로 변경
 		return
 	}
 

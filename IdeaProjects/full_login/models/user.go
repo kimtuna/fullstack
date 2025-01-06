@@ -4,6 +4,7 @@ import (
 	"errors"
 	"full_login/utils/token"
 	"html"
+	"log"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -74,9 +75,9 @@ func GetUserByID(uid uint) (User, error) {
 	var u User
 
 	if err := DB.First(&u, uid).Error; err != nil {
+		log.Println("Error fetching user:", err) // 로그 추가
 		return u, errors.New("User not found!")
 	}
-
 	u.PrepareGive()
 
 	return u, nil
