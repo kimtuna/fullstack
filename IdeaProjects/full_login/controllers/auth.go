@@ -94,5 +94,12 @@ func AuthToken(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Token is valid"})
+
+	// UID 추출
+	uid, err := token.ExtractTokenID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"uid": uid})
 }
