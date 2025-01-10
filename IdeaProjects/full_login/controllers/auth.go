@@ -86,3 +86,13 @@ func CurrentUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "success", "data": u})
 }
+
+// 토큰 유효성 검사
+func AuthToken(c *gin.Context) {
+	err := token.TokenValid(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Token is valid"})
+}
