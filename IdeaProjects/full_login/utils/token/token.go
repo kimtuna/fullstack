@@ -2,6 +2,7 @@ package token
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -31,6 +32,7 @@ func GenerateToken(user_id uint) (string, error) {
 
 func TokenValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
+	log.Printf("TokenValid: %s", tokenString)
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -45,6 +47,7 @@ func TokenValid(c *gin.Context) error {
 
 func ExtractToken(c *gin.Context) string {
 	token := c.Query("token")
+	log.Printf("ExtractToken: %s", token)
 	if token != "" {
 		return token
 	}

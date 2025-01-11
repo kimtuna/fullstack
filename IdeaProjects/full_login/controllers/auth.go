@@ -4,6 +4,7 @@ import (
 	"full_login/models"
 	"full_login/utils/token"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -89,11 +90,7 @@ func CurrentUser(c *gin.Context) {
 
 // 토큰 유효성 검사
 func AuthToken(c *gin.Context) {
-	err := token.TokenValid(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
+	log.Printf("func AuthToken log")
 
 	// UID 추출
 	uid, err := token.ExtractTokenID(c)
